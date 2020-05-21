@@ -874,7 +874,7 @@ void __gc_matching_ticket(const GameCard_t *gamecard, const GameCardEntry_t *ent
     }
 
     // check if we already have the key.
-    if (setting_get_install_lower_key_gen() && entry->cnmt.key.id == nca_get_keyslot_id())
+    if (settingsConfig.g_install_lower_key_gen && entry->cnmt.key.id == nca_get_keyslot_id())
     {
         return;
     }
@@ -897,7 +897,7 @@ void __gc_matching_ticket(const GameCard_t *gamecard, const GameCardEntry_t *ent
         if (strcmp(ext, ".tik") == 0 && strstr(gamecard->string_table[i].name, str_id))
         {
             write_log("found ticket\n");
-            if (setting_get_install_lower_key_gen())
+            if (settingsConfig.g_install_lower_key_gen)
             {
                 __gc_do_ticket_magic(gamecard->string_table[i].name, entry->cnmt.key.id);
                 return;
@@ -999,7 +999,7 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
         return false;
     }
 
-    if (setting_get_install_lower_key_gen() == SettingFlag_On && !crypto_has_key_gen_from_keys(NcaKeyAreaEncryptionKeyIndex_Application, 0))
+    if (settingsConfig.g_install_lower_key_gen == SettingFlag_On && !crypto_has_key_gen_from_keys(NcaKeyAreaEncryptionKeyIndex_Application, 0))
     {
         ui_display_error_box(ErrorCode_NoKeyFile, "");
         return false;
@@ -1009,25 +1009,23 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
     *   Get the override install location from settings.
     *   TODO: actually implement this into the settings menu.
     */
-    SettingsInstallLocation base_location = setting_get_install_base_location();
-    if (base_location == SettingsInstallLocation_Default) base_location = storage_id;
-    SettingsInstallLocation upp_location = setting_get_install_upp_location();
-    if (upp_location == SettingsInstallLocation_Default) upp_location = storage_id;
-    SettingsInstallLocation dlc_location = setting_get_install_dlc_location();
-    if (dlc_location == SettingsInstallLocation_Default) dlc_location = storage_id;
+    if (settingsConfig.g_install_base_location == SettingsInstallLocation_Default) 
+        settingsConfig.g_install_base_location = storage_id;
 
-    SettingFlag base_flag = setting_get_install_base();
-    SettingFlag upp_flag = setting_get_install_upp();
-    SettingFlag dlc_flag = setting_get_install_dlc();
+    if (settingsConfig.g_install_upp_location == SettingsInstallLocation_Default) 
+        settingsConfig.g_install_upp_location = storage_id;
+
+    if (settingsConfig.g_install_dlc_location == SettingsInstallLocation_Default) 
+        settingsConfig.g_install_dlc_location = storage_id;
 
     // we will allow for split installs soon. so we need to check both storage sizes.
     size_t total_install_size_nand = 0;
     size_t total_install_size_sd = 0;
 
     // calculate the size of install for each storage.
-    if (base_flag && GAMECARD.entries[game_pos].base_count)
+    if (settingsConfig.g_install_base && GAMECARD.entries[game_pos].base_count)
     {
-        if (base_location == SettingsInstallLocation_User)
+        if (settingsConfig.g_install_base_location == SettingsInstallLocation_User)
         {
             total_install_size_nand += GAMECARD.entries[game_pos].base_size;
         }
@@ -1036,9 +1034,9 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
             total_install_size_sd += GAMECARD.entries[game_pos].base_size;
         }
     }
-    if (upp_flag && GAMECARD.entries[game_pos].upp_count)
+    if (settingsConfig.g_install_upp && GAMECARD.entries[game_pos].upp_count)
     {
-        if (base_location == SettingsInstallLocation_User)
+        if (settingsConfig.g_install_base_location == SettingsInstallLocation_User)
         {
             total_install_size_nand += GAMECARD.entries[game_pos].upp_size;
         }
@@ -1047,9 +1045,9 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
             total_install_size_sd += GAMECARD.entries[game_pos].upp_size;
         }
     }
-    if (dlc_flag && GAMECARD.entries[game_pos].dlc_count)
+    if (settingsConfig.g_install_dlc && GAMECARD.entries[game_pos].dlc_count)
     {
-        if (base_location == SettingsInstallLocation_User)
+        if (settingsConfig.g_install_base_location == SettingsInstallLocation_User)
         {
             total_install_size_nand += GAMECARD.entries[game_pos].dlc_size;
         }
@@ -1085,17 +1083,17 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
     */
 
     // base.
-    if (base_flag == SettingFlag_On)
+    if (settingsConfig.g_install_base == SettingFlag_On)
     {
         for (uint16_t i = 0; i < GAMECARD.entries[game_pos].base_count; i++)
         {
-            if (!ncm_is_key_newer(&GAMECARD.entries[game_pos].base[i].cnmt.key) && setting_get_overwrite_newer_version() == SettingFlag_Off)
+            if (!ncm_is_key_newer(&GAMECARD.entries[game_pos].base[i].cnmt.key) && !settingsConfig.g_overwrite_newer_version)
             {
                 continue;
             }
 
             __gc_matching_ticket(&GAMECARD, &GAMECARD.entries[game_pos].base[i]);
-            if (!__gc_install(&GAMECARD.entries[game_pos].base[i], base_location))
+            if (!__gc_install(&GAMECARD.entries[game_pos].base[i], settingsConfig.g_install_base_location))
             {
                 return false;
             }
@@ -1103,17 +1101,17 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
     }
 
     // upp.
-    if (upp_flag == SettingFlag_On)
+    if (settingsConfig.g_install_upp == SettingFlag_On)
     {
         for (uint16_t i = 0; i < GAMECARD.entries[game_pos].upp_count; i++)
         {
-            if (!ncm_is_key_newer(&GAMECARD.entries[game_pos].upp[i].cnmt.key) && setting_get_overwrite_newer_version() == SettingFlag_Off)
+            if (!ncm_is_key_newer(&GAMECARD.entries[game_pos].upp[i].cnmt.key) && !settingsConfig.g_overwrite_newer_version)
             {
                 continue;
             }
 
             __gc_matching_ticket(&GAMECARD, &GAMECARD.entries[game_pos].upp[i]);
-            if (!__gc_install(&GAMECARD.entries[game_pos].upp[i], upp_location))
+            if (!__gc_install(&GAMECARD.entries[game_pos].upp[i], settingsConfig.g_install_upp_location))
             {
                 return false;
             }
@@ -1121,17 +1119,17 @@ bool gc_install_ex(uint16_t game_pos, NcmStorageId storage_id)
     }
 
     // dlc.
-    if (dlc_flag == SettingFlag_On)
+    if (settingsConfig.g_install_dlc == SettingFlag_On)
     {
         for (uint16_t i = 0; i < GAMECARD.entries[game_pos].dlc_count; i++)
         {
-            if (!ncm_is_key_newer(&GAMECARD.entries[game_pos].dlc[i].cnmt.key) && setting_get_overwrite_newer_version() == SettingFlag_Off)
+            if (!ncm_is_key_newer(&GAMECARD.entries[game_pos].dlc[i].cnmt.key) && !settingsConfig.g_overwrite_newer_version)
             {
                 continue;
             }
 
             __gc_matching_ticket(&GAMECARD, &GAMECARD.entries[game_pos].dlc[i]);
-            if (!__gc_install(&GAMECARD.entries[game_pos].dlc[i], dlc_location))
+            if (!__gc_install(&GAMECARD.entries[game_pos].dlc[i], settingsConfig.g_install_dlc_location))
             {
                 return false;
             }

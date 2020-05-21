@@ -718,7 +718,7 @@ bool nca_start_install(const char *name, const NcmContentId *content_id, uint64_
 
     nca_print_header(header);
 
-    if (setting_get_install_lower_key_gen())
+    if (settingsConfig.g_install_lower_key_gen)
     {
         if (nca_has_rights_id(&header->rights_id))
         {

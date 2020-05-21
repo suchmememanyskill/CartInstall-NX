@@ -70,25 +70,11 @@ void app_exit()
 	SDL_EasyExit();
 }
 
-void setup_app_dir(const char *nro)
-{
-    if (strcmp(APP_PATH, nro) == 0)
-        return;
-    if (!check_if_dir_exists(APP_DIR))
-        create_dir(APP_DIR);
-    if (check_if_file_exists(APP_PATH))
-        delete_file(APP_PATH);
-    move_file(nro, APP_PATH);
-}
-
 int main(int argc, char *argv[])
 {
 	// init everything.
 	appletLockExit();
 	app_init();
-	
-	// setup the app dir and move the nro to the folder.
-	setup_app_dir(argv[0]);
 
 	//appletBeginBlockingHomeButtonShortAndLongPressed(0);
 

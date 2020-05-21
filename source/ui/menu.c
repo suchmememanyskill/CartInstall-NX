@@ -703,14 +703,6 @@ void ui_display_options(void)
 
     SDL_Rect box = { 255 / 1.5, 145 / 1.5, SCREEN_W - (box.x  * 2), SCREEN_H - (box.y * 2)};
 
-    SettingFlag install_base = setting_get_install_base();
-    SettingFlag install_upp = setting_get_install_upp();
-    SettingFlag install_dlc = setting_get_install_dlc();
-    SettingFlag install_lower_key_gen = setting_get_install_lower_key_gen();
-
-    SettingFlag sound_sound = setting_get_sound();
-    SettingFlag sound_music = setting_get_music();
-
     uint8_t cursor = 0;
     uint8_t r_cursor = 0;
     bool left_column = true;
@@ -781,26 +773,22 @@ void ui_display_options(void)
                         {
                             case 0:
                             {
-                                install_base = !install_base;
-                                setting_set_install_base(install_base);
+                                settingsConfig.g_install_base = !settingsConfig.g_install_base;
                                 break;
                             }
                             case 1:
                             {
-                                install_upp = !install_upp;
-                                setting_set_install_upp(install_upp);
+                                settingsConfig.g_install_upp = !settingsConfig.g_install_upp;
                                 break;
                             }
                             case 2:
                             {
-                                install_dlc = !install_dlc;
-                                setting_set_install_dlc(install_dlc);
+                                settingsConfig.g_install_dlc = !settingsConfig.g_install_dlc;
                                 break;
                             }
                             case 3:
                             {
-                                install_lower_key_gen = !install_lower_key_gen;
-                                setting_set_install_lower_key_gen(install_lower_key_gen);
+                                settingsConfig.g_install_lower_key_gen = !settingsConfig.g_install_lower_key_gen;
                                 break;
                             }
                         }
@@ -812,14 +800,12 @@ void ui_display_options(void)
                         {
                             case 0:
                             {
-                                sound_music = !sound_music;
-                                setting_set_music(sound_music);
+                                settingsConfig.g_sounds_music = !settingsConfig.g_sounds_music;
                                 break;
                             }
                             case 1:
                             {
-                                sound_sound = !sound_sound;
-                                setting_set_sound(sound_sound);
+                                settingsConfig.g_sounds_sound = !settingsConfig.g_sounds_sound;
                                 break;
                             }
                         }
@@ -862,28 +848,28 @@ void ui_display_options(void)
             {
                 //base
                 SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 350, box.y + 135, Colour_Nintendo_White, title_base);
-                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 135, install_base ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", install_base ? "On" : "Off");
+                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 135, settingsConfig.g_install_base ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", settingsConfig.g_install_base ? "On" : "Off");
                 ui_draw_spacers(box.x + 350, box.y + 135, 23);
                 if (!left_column && r_cursor == 0)
                     ui_draw_highlight_box(&pulse_shape, box.x + 350, box.y + 135, 550, 40);
                 
                 //upp
                 SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 350, box.y + 195, Colour_Nintendo_White, title_update);
-                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 195, install_upp ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", install_upp ? "On" : "Off");
+                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 195, settingsConfig.g_install_upp ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", settingsConfig.g_install_upp ? "On" : "Off");
                 ui_draw_spacers(box.x + 350, box.y + 195, 23);
                 if (!left_column && r_cursor == 1)
                     ui_draw_highlight_box(&pulse_shape, box.x + 350, box.y + 195, 550, 40);
                 
                 //dlc
                 SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 350, box.y + 255, Colour_Nintendo_White, title_dlc);
-                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 255, install_dlc ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", install_dlc ? "On" : "Off");
+                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 255, settingsConfig.g_install_dlc ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", settingsConfig.g_install_dlc ? "On" : "Off");
                 ui_draw_spacers(box.x + 350, box.y + 255, 23);
                 if (!left_column && r_cursor == 2)
                     ui_draw_highlight_box(&pulse_shape, box.x + 350, box.y + 255, 550, 40);
 
                 //keygen
                 SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 350, box.y + 335, Colour_Nintendo_White, "Lower Keygen Version");
-                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 335, install_lower_key_gen ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", install_lower_key_gen ? "On" : "Off");
+                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 335, settingsConfig.g_install_lower_key_gen ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", settingsConfig.g_install_lower_key_gen ? "On" : "Off");
                 ui_draw_spacers(box.x + 350, box.y + 335, 23);
                 if (!left_column && r_cursor == 3)
                     ui_draw_highlight_box(&pulse_shape, box.x + 350, box.y + 335, 550, 40);
@@ -897,7 +883,7 @@ void ui_display_options(void)
             {
                 //music
                 SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 350, box.y + 135, Colour_Nintendo_White, title_music);
-                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 135, sound_music ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", sound_music ? "On" : "Off");
+                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 135, settingsConfig.g_sounds_music ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", settingsConfig.g_sounds_music ? "On" : "Off");
                 ui_draw_spacers(box.x + 350, box.y + 135, 23);
                 if (!left_column && r_cursor == 0)
                     ui_draw_highlight_box(&pulse_shape, box.x + 350, box.y + 135, 550, 40);
@@ -908,7 +894,7 @@ void ui_display_options(void)
 
                 //sound
                 SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 350, box.y + 265, Colour_Nintendo_White, title_sound);
-                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 265, sound_sound ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", sound_sound ? "On" : "Off");
+                SDL_DrawText(FONT_TEXT[QFontSize_23].fnt, box.x + 800, box.y + 265, settingsConfig.g_sounds_sound ? Colour_Nintendo_Cyan : Colour_Nintendo_Silver, "%s", settingsConfig.g_sounds_sound ? "On" : "Off");
                 ui_draw_spacers(box.x + 350, box.y + 265, 23);
                 if (!left_column && r_cursor == 1)
                     ui_draw_highlight_box(&pulse_shape, box.x + 350, box.y + 265, 550, 40);

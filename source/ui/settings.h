@@ -18,54 +18,20 @@ typedef enum
     SettingsInstallLocation_SdCard = NcmStorageId_SdCard,
 } SettingsInstallLocation;
 
-
-/*
-*   Install Getters.
-*/
-
-SettingFlag setting_get_install_base(void);
-SettingFlag setting_get_install_upp(void);
-SettingFlag setting_get_install_dlc(void);
-SettingsInstallLocation setting_get_install_base_location(void);
-SettingsInstallLocation setting_get_install_upp_location(void);
-SettingsInstallLocation setting_get_install_dlc_location(void);
-SettingFlag setting_get_overwrite_newer_version(void);
-SettingFlag setting_get_install_lower_key_gen(void);
-SettingFlag setting_get_install_standard_crypto(void);
-SettingFlag setting_get_install_backlight(void);
-
-
-/*
-*   Install Setters.
-*/
-
-//
-void setting_set_install_base(SettingFlag flag);
-void setting_set_install_upp(SettingFlag flag);
-void setting_set_install_dlc(SettingFlag flag);
-void setting_set_install_base_location(SettingsInstallLocation location);
-void setting_set_install_upp_location(SettingsInstallLocation location);
-void setting_set_install_dlc_location(SettingsInstallLocation location);
-void setting_set_overwrite_newer_version(SettingFlag flag);
-void setting_set_install_lower_key_gen(SettingFlag flag);
-void setting_set_install_standard_crypto(SettingFlag flag);
-void setting_set_install_backlight(SettingFlag flag);
-
-
-/*
-*   Sound Getters.
-*/
-
-//
-SettingFlag setting_get_sound(void);
-SettingFlag setting_get_music(void);
-
-
-/*
-*   Sound Setters.
-*/
-
-void setting_set_sound(SettingFlag flag);
-void setting_set_music(SettingFlag flag);
+typedef struct {
+    SettingFlag g_install_base;
+    SettingFlag g_install_upp;
+    SettingFlag g_install_dlc;
+    SettingsInstallLocation g_install_base_location;
+    SettingsInstallLocation g_install_upp_location;
+    SettingsInstallLocation g_install_dlc_location;
+    SettingFlag g_overwrite_newer_version;
+    SettingFlag g_install_lower_key_gen;
+    SettingFlag g_install_standard_crypto;
+    SettingFlag g_install_backlight;
+    SettingFlag g_sounds_sound;
+    SettingFlag g_sounds_music;
+} SettingsConfig;
+extern SettingsConfig settingsConfig;
 
 #endif
