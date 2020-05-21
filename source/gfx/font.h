@@ -31,8 +31,8 @@ typedef struct
     TTF_Font *fnt;
 } font_t;
 
-font_t FONT_TEXT[FONT_MAX];
-font_t FONT_BUTTON[FONT_MAX];
+extern font_t FONT_TEXT[];
+extern font_t FONT_BUTTON[];
 
 //
 bool init_font();

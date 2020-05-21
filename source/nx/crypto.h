@@ -14,10 +14,10 @@ typedef enum
 } EncryptMode;
 
 
-uint8_t HEADER_KEK[0x10];
-uint8_t HEADER_KEY[0x20];
-uint8_t HEADER_KEY_0[0x10];
-uint8_t HEADER_KEY_1[0x10];
+extern uint8_t HEADER_KEK[];
+extern uint8_t HEADER_KEY[];
+extern uint8_t HEADER_KEY_0[];
+extern uint8_t HEADER_KEY_1[];
 
 
 //

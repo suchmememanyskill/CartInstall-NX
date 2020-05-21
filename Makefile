@@ -30,15 +30,15 @@ include $(DEVKITPRO)/libnx/switch_rules
 #     - <libnx folder>/default_icon.jpg
 #---------------------------------------------------------------------------------
 
-APP_TITLE   :=	GameCard Installer
+APP_TITLE   :=	CartInstall-NX
 APP_AUTHOR  :=	TotalJustice
 APP_VERSION :=	2.0.0
 
-TARGET		:=	gamecard_installer
+TARGET		:=	CartInstall-NX
 BUILD		:=	build
 SOURCES		:=	source source/ui source/gfx source/sound source/nx source/util
 DATA		:=	data
-INCLUDES	:=	includes includes/ui includes/gfx includes/sound includes/nx includes/util
+INCLUDES	:=	source source/ui source/gfx source/sound source/nx source/util
 ROMFS		:=	romfs
 
 #---------------------------------------------------------------------------------
