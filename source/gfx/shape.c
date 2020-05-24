@@ -17,6 +17,18 @@ shape_t create_shape(uint8_t colour, int x, int y, int w, int h, bool filled)
     return shape;
 }
 
+shape_t *create_shape_ptr(uint8_t colour, int x, int y, int w, int h, bool filled)
+{
+    shape_t *shape = malloc(sizeof(shape));
+    shape->info.rect.x = x;
+    shape->info.rect.y = y;
+    shape->info.rect.w = w;
+    shape->info.rect.h = h;
+    shape->info.colour = colour;
+    shape->info.filled = filled;
+    return shape;
+}
+
 void draw_shape(shape_t *shape)
 {
     SDL_DrawShape(shape->info.colour, shape->info.rect.x, shape->info.rect.y, shape->info.rect.w, shape->info.rect.h, shape->info.filled);

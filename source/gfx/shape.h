@@ -30,6 +30,7 @@ typedef struct _shape
 //
 shape_t create_shape(uint8_t colour, int x, int y, int w, int h, bool filled);
 
+shape_t *create_shape_ptr(uint8_t colour, int x, int y, int w, int h, bool filled);
 //
 void draw_shape(shape_t *shape);
 

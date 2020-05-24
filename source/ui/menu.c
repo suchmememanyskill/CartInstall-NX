@@ -20,6 +20,7 @@
 #include "nx/lbl.h"
 
 #include "util/log.h"
+#include "mainmenu.h"
 
 #ifdef DEBUG
 #define TITLE_NAME      "GameCard Installer (DEBUG)"
@@ -1213,6 +1214,9 @@ uint8_t handle_input(void)
 
 void start_menu(void)
 {
+    test();
+    return;
+
     while (appletMainLoop())
     {
         // get input.
